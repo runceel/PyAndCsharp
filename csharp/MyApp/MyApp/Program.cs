@@ -28,13 +28,14 @@ namespace MyApp
                 }
             }
 
-            var testData_0 = testData.Select(d => new { d.a, d.b, d.x, d.y, z = MultiplyToInt(d.x, d.y) });
-            var testData_1 = testData_0.GroupBy(d => d.a)
-                .Select(g => new { a = g.Key, sum = g.Sum(d => d.z) });
+            var result = testData
+                .Select(d => (d.a, d.b, d.x, d.y, z: MultiplyToInt(d.x, d.y)))
+                .GroupBy(d => d.a)
+                .Select(g => new ResultData(a: g.Key, sum: g.Sum(d => d.z)));
             using (StreamWriter file = File.CreateText("result.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, testData_1);
+                serializer.Serialize(file, result);
             }
 
             var ts = stopwatch.Elapsed;
@@ -49,11 +50,6 @@ namespace MyApp
         }
     }
 
-    class TestData
-    {
-        public string a { get; set; }
-        public string b { get; set; }
-        public double x { get; set; }
-        public double y { get; set; }
-    }
+    record struct TestData(string a, string b, double x, double y);
+    record struct ResultData(string a, int sum);
 }
