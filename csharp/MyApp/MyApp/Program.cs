@@ -28,9 +28,9 @@ namespace MyApp
                 }
             }
 
-            var testData_0 = testData.Select(d => new { d.a, d.b, d.x, d.y, z = MultiplyToInt(d.x, d.y) }).ToList();
+            var testData_0 = testData.Select(d => new { d.a, d.b, d.x, d.y, z = MultiplyToInt(d.x, d.y) });
             var testData_1 = testData_0.GroupBy(d => d.a)
-                .Select(g => new { a = g.Key, sum = g.Sum(d => d.z) }).ToList();
+                .Select(g => new { a = g.Key, sum = g.Sum(d => d.z) });
             using (StreamWriter file = File.CreateText("result.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
